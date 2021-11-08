@@ -42,6 +42,9 @@ Icon mapchangestatus(String status) {
     case "paid_customer":
       icon = Icon(Icons.info, size: 60, color: Color(0xFF00C853));
       break;
+    case "paid_partner":
+      icon = Icon(Icons.info, size: 60, color: Color(0xFF00C853));
+      break;  
     case "cancelled":
       icon = Icon(Icons.info, size: 60, color: Color(0xFFC62828));
       break;
@@ -66,8 +69,11 @@ String status(String status) {
       status = "Bestätigt";
       break;
     case "paid_customer":
-      status = "Erledigt";
+      status = "bezahlter_kunde";
       break;
+    case "paid_partner":
+      status = "partner_kunde";
+      break;  
     case "finished":
       status = "Erledigt";
       break;
@@ -77,6 +83,10 @@ String status(String status) {
 
     case "rejected":
       status = "abgelehnt";
+      break;
+
+    case "cancelled":
+      status = "Storniert";
       break;
   }
 

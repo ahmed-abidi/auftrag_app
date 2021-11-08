@@ -162,7 +162,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                       color: Colors.white,
                                     )
                                   : Text(
-                                      'Informationen zum Zurücksetzen des Passworts senden',
+                                      'Passwort zurücksetzen',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 18.0,

@@ -267,16 +267,11 @@ class PdfInvoiceApi {
                   'Bitte überweisen Sie die offenen Positione, auf das unten genannte Konto.',
               value: ''),
           buildSimpleText(
-              title:
-                  'Zahlbar sofort und ohne Abzug, innerhalb der nächsten 5 Werktage.',
-              value: ''),
-          buildSimpleText(title: 'Kontoinhaber   Enrico Richter', value: ''),
-          buildSimpleText(title: 'Kreditinstitut   Commerzbank', value: ''),
+              title: 'Kontoinhaber   Mohamed EL-Mallouki', value: ''),
+          buildSimpleText(title: 'Kreditinstitut   Solaris bank', value: ''),
           buildSimpleText(
-              title: 'IBAN   DE84 5084 0005 0381 0280 00', value: ''),
-          buildSimpleText(
-              title: 'IBAN2   DE93 5084 0005 0381 8374 00', value: ''),
-          buildSimpleText(title: 'BIC   COBADEFFXXX', value: ''),
+              title: 'IBAN   DE87 1101 0100 2993 2993 20', value: ''),
+          buildSimpleText(title: 'BIC   SOBKDEBBXXX', value: ''),
         ],
       );
 

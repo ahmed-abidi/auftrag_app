@@ -323,6 +323,7 @@ class _OrderdetailScreenState extends State<OrderdetailScreen> {
         if (widget.order.status == "confirmed" ||
             widget.order.status == "finished " ||
             widget.order.status == "paid_customer" ||
+            widget.order.status == "paid_partner" ||
             confirm == 200) {
           confirmedorder(context);
         } else if (widget.order.status == "cancelled") {
@@ -366,7 +367,9 @@ class _OrderdetailScreenState extends State<OrderdetailScreen> {
         } else if (widget.order.status == "cancelled") {
           cancledorder(context);
         } else if (widget.order.status == "paid_customer" ||
-            widget.order.status == "finished") {
+            widget.order.status == "finished" ||
+            widget.order.status == "paid_customer" ||
+            widget.order.status == "paid_partner") {
           finsihdorder(context);
         }
       },
@@ -523,7 +526,7 @@ class _OrderdetailScreenState extends State<OrderdetailScreen> {
                           onPressed: () {
                             var reason = _reasonController.text;
 
-                            orderapi.cancled(order.id, reason);
+                            orderapi.cancled(widget.order.id, reason);
                             context.read<OrderBloc>().add(RefreshOrder());
                             Navigator.pop(context);
                           },
@@ -575,7 +578,7 @@ class _OrderdetailScreenState extends State<OrderdetailScreen> {
                           onPressed: () {
                             var reason = _reasonController.text;
 
-                            orderapi.cancled(order.id, reason);
+                            orderapi.cancled(widget.order.id, reason);
                             context.read<OrderBloc>().add(RefreshOrder());
                             Navigator.pop(context);
                           },

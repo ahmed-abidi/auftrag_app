@@ -107,7 +107,8 @@ class OrderCard extends StatelessWidget {
                     if (order.status == "accepted" ||
                         order.status == "confirmed" ||
                         order.status == "finished" ||
-                        order.status == "paid_customer")
+                        order.status == "paid_customer" ||
+                        order.status == "paid_partner")
                       {
                         /*Navigator.of(context)
                             .pushNamed('/orderdetail', arguments: order)*/

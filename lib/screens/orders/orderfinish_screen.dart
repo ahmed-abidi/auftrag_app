@@ -17,6 +17,8 @@ import 'package:auftrag_mobile/models/order.dart';
 
 import 'package:auftrag_mobile/utils/utils.dart';
 
+import 'orders_screen.dart';
+
 class Orderfinish {
   String date;
   String method;
@@ -44,10 +46,11 @@ List<Orderfinish> orders = [];
 
 class OrderfinishScreen extends StatefulWidget {
   Orderfinish order;
-  OrderfinishScreen({
-    Key key,
-    this.order,
-  }) : super(key: key);
+  final Order orderr;
+  final int orderid;
+
+  OrderfinishScreen({Key key, this.order, this.orderr, this.orderid})
+      : super(key: key);
 
   @override
   _OrderfinishScreenState createState() => _OrderfinishScreenState();
@@ -59,6 +62,7 @@ class _OrderfinishScreenState extends State<OrderfinishScreen>
   AnimationController _animationController;
   final _scrollController = ScrollController();
   final _scrollThreshold = 200.0;
+  int finish;
 
   OrderApiClient orderapi = new OrderApiClient();
 
@@ -562,11 +566,24 @@ class _OrderfinishScreenState extends State<OrderfinishScreen>
 
       return TextButton(
         onPressed: () async {
-          await orderapi.finish(
-              order.id, method, orders.first.date, netTotalprice, totalmatriel);
-          _finishDialog(context);
+          if (order.status == "confirmed") {
+            var result = await orderapi.finish(order.id, method,
+                orders.first.date, netTotalprice, totalmatriel);
+            context.read<OrderBloc>().add(RefreshOrder());
 
-          context.read<OrderBloc>().add(RefreshOrder());
+            _finishDialog(context);
+            orders.clear();
+            setState(() {
+              finish = result;
+            });
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => new OrdersScreen(
+                scaffoldKey: null,
+              ),
+            ));
+          } else if (finish == 200) {
+            _finsihdorder(context);
+          }
         },
         style: TextButton.styleFrom(
           backgroundColor: Theme.of(context).primaryColor,
@@ -625,7 +642,7 @@ class _OrderfinishScreenState extends State<OrderfinishScreen>
         });
   }
 
-  void finsihdorder(BuildContext context) {
+  void _finsihdorder(BuildContext context) {
     showDialog(
         context: context,
         builder: (context) {
@@ -634,7 +651,7 @@ class _OrderfinishScreenState extends State<OrderfinishScreen>
             content: SingleChildScrollView(
               child: ListBody(
                 children: const <Widget>[
-                  Text('Bestellung ist erfolgreich abgeschlossen'),
+                  Text('Bestellung schon fertig'),
                 ],
               ),
             ),
