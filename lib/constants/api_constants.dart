@@ -4,7 +4,7 @@ import 'package:flutter_pusher_client/flutter_pusher.dart';
 import 'package:laravel_echo/laravel_echo.dart';
 
 class ApiConstants {
-  static const BASE_URL = 'http://162.0.213.238/api';
+  static const BASE_URL = 'https://order-crm.de/api';
   //static const BASE_URL = 'http://c516354e4fc3.ngrok.io/api';
 }
 
