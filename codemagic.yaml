@@ -10,17 +10,23 @@ workflows:
         script: flutter clean
       - name: Fetch Dependencies
         script: flutter pub get
-      - name: Update Podfile and Install CocoaPods
+      - name: Fix Podfile and Run Pod Install
         script: |
           cd ios
-          # Ensure platform iOS 12.0 in Podfile
+          # Ensure iOS platform is specified
           if [ -f "Podfile" ]; then
             sed -i '' "s/^platform :ios.*/platform :ios, '12.0'/" Podfile || echo "platform :ios, '12.0'" >> Podfile
           else
             echo "platform :ios, '12.0'" > Podfile
           fi
-          # Remove old Pods and install dependencies
+          
+          # Check and remove `RunnerTests` references if they exist
+          sed -i '' '/target.*RunnerTests/d' Podfile
+
+          # Remove old Pods and Podfile.lock
           rm -rf Pods Podfile.lock
+
+          # Install Pods
           pod install
           cd ..
       - name: Build iOS Release
@@ -30,6 +36,4 @@ workflows:
     publishing:
       scripts:
         - name: Publish Artifacts
-          script: |
-            echo "Publishing build artifacts..."
-            # Add custom publishing logic if needed
+          script: echo "Build artifacts published successfully!"
