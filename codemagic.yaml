@@ -1,0 +1,35 @@
+workflows:
+  flutter-ios:
+    name: Build Flutter iOS
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: 1.11.3 # Update CocoaPods version
+    scripts:
+      - name: Clean Flutter Project
+        script: flutter clean
+      - name: Fetch Dependencies
+        script: flutter pub get
+      - name: Update Podfile and Install CocoaPods
+        script: |
+          cd ios
+          # Ensure platform iOS 12.0 in Podfile
+          if [ -f "Podfile" ]; then
+            sed -i '' "s/^platform :ios.*/platform :ios, '12.0'/" Podfile || echo "platform :ios, '12.0'" >> Podfile
+          else
+            echo "platform :ios, '12.0'" > Podfile
+          fi
+          # Remove old Pods and install dependencies
+          rm -rf Pods Podfile.lock
+          pod install
+          cd ..
+      - name: Build iOS Release
+        script: flutter build ios --release
+    artifacts:
+      - build/ios/ipa
+    publishing:
+      scripts:
+        - name: Publish Artifacts
+          script: |
+            echo "Publishing build artifacts..."
+            # Add custom publishing logic if needed
