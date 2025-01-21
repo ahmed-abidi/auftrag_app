@@ -1,39 +1,56 @@
 workflows:
-  flutter-ios:
-    name: Build Flutter iOS
+  ios-workflow:
+    name: iOS Workflow
     environment:
+      # Flutter version (use 'stable' or a specific version)
       flutter: stable
+
+      # Xcode version (use 'latest' or a specific version)
       xcode: latest
-      cocoapods: 1.11.3 # Update CocoaPods version
+
+      # Environment variables for iOS code signing
+      groups:
+        - ios_code_signing  # Add your iOS code signing group here
+
+      # Variables for Xcode workspace and scheme
+      vars:
+        XCODE_WORKSPACE: "Runner.xcworkspace"  # Adjust if your workspace has a different name
+        XCODE_SCHEME: "Runner"  # Adjust if your scheme has a different name
+
     scripts:
-      - name: Clean Flutter Project
-        script: flutter clean
-      - name: Fetch Dependencies
-        script: flutter pub get
-      - name: Fix Podfile and Run Pod Install
+      # Install Flutter dependencies with --no-sound-null-safety
+      - name: Install Flutter dependencies
         script: |
-          cd ios
-          # Ensure iOS platform is specified
-          if [ -f "Podfile" ]; then
-            sed -i '' "s/^platform :ios.*/platform :ios, '12.0'/" Podfile || echo "platform :ios, '12.0'" >> Podfile
-          else
-            echo "platform :ios, '12.0'" > Podfile
-          fi
-          
-          # Check and remove `RunnerTests` references if they exist
-          sed -i '' '/target.*RunnerTests/d' Podfile
+          flutter pub get --no-sound-null-safety
 
-          # Remove old Pods and Podfile.lock
-          rm -rf Pods Podfile.lock
+      # Build iOS with --no-sound-null-safety
+      - name: Build iOS
+        script: |
+          flutter build ios --no-sound-null-safety --release
 
-          # Install Pods
-          pod install
-          cd ..
-      - name: Build iOS Release
-        script: flutter build ios --release
+      # Optional: Archive the iOS build (if needed)
+      - name: Archive iOS build
+        script: |
+          xcodebuild archive \
+            -workspace "$XCODE_WORKSPACE" \
+            -scheme "$XCODE_SCHEME" \
+            -archivePath build/ios/archive/Runner.xcarchive
+
+      # Optional: Export the IPA (if needed)
+      - name: Export IPA
+        script: |
+          xcodebuild -exportArchive \
+            -archivePath build/ios/archive/Runner.xcarchive \
+            -exportPath build/ios/ipa \
+            -exportOptionsPlist ios/export_options.plist
+
     artifacts:
-      - build/ios/ipa
+      # Save the generated IPA file
+      - build/ios/ipa/*.ipa
+
     publishing:
-      scripts:
-        - name: Publish Artifacts
-          script: echo "Build artifacts published successfully!"
+      # Optional: Publish the IPA to App Store Connect
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_API_KEY  # Add your App Store Connect API key
+        key_id: $APP_STORE_CONNECT_KEY_ID    # Add your App Store Connect Key ID
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID  # Add your App Store Connect Issuer ID
