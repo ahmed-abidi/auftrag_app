@@ -2,47 +2,26 @@ workflows:
   ios-workflow:
     name: iOS Workflow
     environment:
-      # Flutter version (use 'stable' or a specific version)
-      flutter: stable
+      # Use a specific Flutter version compatible with the project
+      flutter: 2.10.5
 
-      # Xcode version (use 'latest' or a specific version)
-      xcode: latest
+      # Use a specific Xcode version for consistency
+      xcode: 14.1
 
       # Environment variables for iOS code signing
       groups:
-        - ios_code_signing  # Add your iOS code signing group here
-
-      # Variables for Xcode workspace and scheme
-      vars:
-        XCODE_WORKSPACE: "Runner.xcworkspace"  # Adjust if your workspace has a different name
-        XCODE_SCHEME: "Runner"  # Adjust if your scheme has a different name
+        - ios_code_signing  # Replace with your specific group name
 
     scripts:
-      # Install Flutter dependencies with --no-sound-null-safety
+      # Install Flutter dependencies
       - name: Install Flutter dependencies
         script: |
-          flutter pub get --no-sound-null-safety
+          flutter pub get
 
-      # Build iOS with --no-sound-null-safety
+      # Build iOS app with --no-sound-null-safety
       - name: Build iOS
         script: |
           flutter build ios --no-sound-null-safety --release
-
-      # Optional: Archive the iOS build (if needed)
-      - name: Archive iOS build
-        script: |
-          xcodebuild archive \
-            -workspace "$XCODE_WORKSPACE" \
-            -scheme "$XCODE_SCHEME" \
-            -archivePath build/ios/archive/Runner.xcarchive
-
-      # Optional: Export the IPA (if needed)
-      - name: Export IPA
-        script: |
-          xcodebuild -exportArchive \
-            -archivePath build/ios/archive/Runner.xcarchive \
-            -exportPath build/ios/ipa \
-            -exportOptionsPlist ios/export_options.plist
 
     artifacts:
       # Save the generated IPA file
@@ -51,6 +30,6 @@ workflows:
     publishing:
       # Optional: Publish the IPA to App Store Connect
       app_store_connect:
-        api_key: $APP_STORE_CONNECT_API_KEY  # Add your App Store Connect API key
-        key_id: $APP_STORE_CONNECT_KEY_ID    # Add your App Store Connect Key ID
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID  # Add your App Store Connect Issuer ID
+        api_key: $APP_STORE_CONNECT_API_KEY
+        key_id: $APP_STORE_CONNECT_KEY_ID
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
