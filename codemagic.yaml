@@ -5,9 +5,6 @@ workflows:
       # Use a specific Flutter version compatible with the project
       flutter: v2.10.5
 
-      # Use a specific Xcode version for consistency
-      xcode: 13.4.1
-
       # Environment variables for iOS code signing
       groups:
         - ios_code_signing  # Replace with your specific group name
