@@ -3,10 +3,10 @@ workflows:
     name: iOS Workflow
     environment:
       # Use a specific Flutter version compatible with the project
-      flutter: 2.10.5
+      flutter: v2.10.5
 
       # Use a specific Xcode version for consistency
-      xcode: 14.1
+      xcode: 13.4.1
 
       # Environment variables for iOS code signing
       groups:
